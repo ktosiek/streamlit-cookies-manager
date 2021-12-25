@@ -1,4 +1,4 @@
-version = 0.1.1
+version = $(shell poetry version -s)
 
 python_sources = $(wildcard streamlit_cookies_manager/*.py) pyproject.toml MANIFEST.in
 js_sources := $(wildcard streamlit_cookies_manager/public/*) $(wildcard streamlit_cookies_manager/src/*) streamlit_cookies_manager/tsconfig.json
