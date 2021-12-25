@@ -20,7 +20,7 @@ type CookieSpec = AddCookieSpec | DeleteCookieSpec
 
 function onRender(event: Event): void {
     const data = (event as CustomEvent<RenderData>).detail
-    console.log('args', data.args)
+
     saveCookies(data.args["queue"])
 
     const newValue = topDocument.cookie
@@ -39,7 +39,7 @@ function saveCookies(queue: { [k in string]: CookieSpec }) {
     Object.keys(queue).forEach((name) => {
         const spec = queue[name]
         if (spec.value === null)
-            topDocument.cookie = `${encodeURIComponent(name)}=; path=${encodeURIComponent(spec.path)}`
+            topDocument.cookie = `${encodeURIComponent(name)}=; max-age=0; path=${encodeURIComponent(spec.path)}`
         else {
             const date = new Date(spec.expires_at)
             topDocument.cookie = (
@@ -47,9 +47,6 @@ function saveCookies(queue: { [k in string]: CookieSpec }) {
                 ` expires=${date.toUTCString()};` +
                 ` path=${encodeURIComponent(spec.path)};`
             )
-            console.log(`${encodeURIComponent(name)}=${encodeURIComponent(spec.value)};` +
-                ` expires=${date.toUTCString()};` +
-                ` path=${encodeURIComponent(spec.path)};`)
         }
     })
 }
