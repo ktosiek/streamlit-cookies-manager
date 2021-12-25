@@ -36,7 +36,7 @@ class CookieManager(MutableMapping[str, str]):
 
     def __repr__(self):
         if self.ready():
-            return f'<CookieManager: {self._cookies!r}>'
+            return f'<CookieManager: {dict(self)!r}>'
         return '<CookieManager: not ready>'
 
     def __getitem__(self, k: str) -> str:
