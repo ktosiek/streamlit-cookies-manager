@@ -63,7 +63,13 @@ class CookieManager(MutableMapping[str, str]):
     def _get_cookies(self) -> Mapping[str, str]:
         if self._cookies is None:
             raise CookiesNotReady()
-        return self._cookies
+        cookies = self._cookies
+        for name, spec in self._queue.items():
+            if spec['value'] is not None:
+                cookies[name] = spec['value']
+            else:
+                cookies.pop(name, None)
+        return cookies
 
 
 def parse_cookies(raw_cookie):

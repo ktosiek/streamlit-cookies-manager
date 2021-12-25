@@ -21,6 +21,8 @@ value = st.text_input("New value for a cookie")
 if st.button("Change the cookie"):
     cookies['a-cookie'] = value
     "I'll save your cookie on next rerun."
+    assert cookies['a-cookie'] == value, \
+        "CookieManager should return the target value, not the stale one"
 
     if st.button("No really, change it now"):
         cookies.save()  # Force saving the cookies now, without a rerun
