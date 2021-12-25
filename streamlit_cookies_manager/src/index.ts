@@ -1,7 +1,7 @@
 import {RenderData, Streamlit} from "streamlit-component-lib"
 
-const topWindow: Window = window.top || window
-const topDocument = topWindow.document
+const targetWindow: Window = window.parent || window
+const targetDocument = targetWindow.document
 
 let lastValue: string | null = null
 
@@ -23,7 +23,7 @@ function onRender(event: Event): void {
 
     saveCookies(data.args["queue"])
 
-    const newValue = topDocument.cookie
+    const newValue = targetDocument.cookie
     if (lastValue !== newValue && !data.args.saveOnly) {
         Streamlit.setComponentValue(newValue)
         lastValue = newValue
@@ -39,10 +39,10 @@ function saveCookies(queue: { [k in string]: CookieSpec }) {
     Object.keys(queue).forEach((name) => {
         const spec = queue[name]
         if (spec.value === null)
-            topDocument.cookie = `${encodeURIComponent(name)}=; max-age=0; path=${encodeURIComponent(spec.path)}`
+            targetDocument.cookie = `${encodeURIComponent(name)}=; max-age=0; path=${encodeURIComponent(spec.path)}`
         else {
             const date = new Date(spec.expires_at)
-            topDocument.cookie = (
+            targetDocument.cookie = (
                 `${encodeURIComponent(name)}=${encodeURIComponent(spec.value)};` +
                 ` expires=${date.toUTCString()};` +
                 ` path=${encodeURIComponent(spec.path)};`
