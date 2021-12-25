@@ -9,10 +9,12 @@ build: streamlit_cookies_manager/build/index.html sdist wheels
 sdist: dist/streamlit-cookies-manager-$(version).tar.gz
 wheels: dist/streamlit_cookies_manager-$(version)-py3-none-any.whl
 
-dist/streamlit-cookies-manager-$(version).tar.gz: $(python_sources) streamlit_cookies_manager/build/index.html
+js: streamlit_cookies_manager/build/index.html
+
+dist/streamlit-cookies-manager-$(version).tar.gz: $(python_sources) js
 	poetry build -f sdist
 
-dist/streamlit_cookies_manager-$(version)-py3-none-any.whl: $(python_sources) streamlit_cookies_manager/build/index.html
+dist/streamlit_cookies_manager-$(version)-py3-none-any.whl: $(python_sources) js
 	poetry build -f wheel
 
 streamlit_cookies_manager/build/index.html: $(js_sources) $(js_npm_install_marker)

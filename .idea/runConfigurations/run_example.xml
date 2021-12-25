@@ -19,6 +19,8 @@
     <option name="MODULE_MODE" value="true" />
     <option name="REDIRECT_INPUT" value="false" />
     <option name="INPUT_FILE" value="" />
-    <method v="2" />
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="make js" run_configuration_type="MAKEFILE_TARGET_RUN_CONFIGURATION" />
+    </method>
   </configuration>
 </component>
