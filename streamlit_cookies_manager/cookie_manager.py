@@ -11,9 +11,10 @@ _component_func = components.declare_component("CookieManager.sync_cookies", pat
 
 
 class CookieManager(MutableMapping[str, str]):
-    def __init__(self, *, path: str = None):
+    def __init__(self, *, path: str = None, prefix=""):
         self._queue = st.session_state.setdefault('CookieManager.queue', {})
-        raw_cookie = _component_func(queue=self._queue, saveOnly=False, key="CookieManager.sync_cookies")
+        self._prefix = prefix
+        raw_cookie = self._run_component(save_only=False, key="CookieManager.sync_cookies")
         if raw_cookie is None:
             self._cookies = None
         else:
@@ -27,11 +28,17 @@ class CookieManager(MutableMapping[str, str]):
 
     def save(self):
         if self._queue:
-            _component_func(queue=self._queue, saveOnly=True, key="CookieManager.sync_cookies.save")
+            self._run_component(save_only=True, key="CookieManager.sync_cookies.save")
+
+    def _run_component(self, save_only: bool, key: str):
+        queue = {
+            self._prefix + k: v for k, v in self._queue.items()
+        }
+        return _component_func(queue=queue, saveOnly=save_only, key=key)
 
     def _clean_queue(self):
         for name, spec in list(self._queue.items()):
-            value = self._cookies.get(name)
+            value = self._cookies.get(self._prefix + name)
             if value == spec['value']:
                 del self._queue[name]
 
@@ -64,7 +71,11 @@ class CookieManager(MutableMapping[str, str]):
     def _get_cookies(self) -> Mapping[str, str]:
         if self._cookies is None:
             raise CookiesNotReady()
-        cookies = self._cookies
+        cookies = {
+            k[len(self._prefix):]: v
+            for k, v in self._cookies.items()
+            if k.startswith(self._prefix)
+        }
         for name, spec in self._queue.items():
             if spec['value'] is not None:
                 cookies[name] = spec['value']

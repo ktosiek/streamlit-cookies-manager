@@ -28,10 +28,11 @@ class EncryptedCookieManager(MutableMapping[str, str]):
             self, *,
             password: str,
             path: str = None,
+            prefix: str = "",
             key_params_cookie="EncryptedCookieManager.key_params",
             ignore_broken=True,
     ):
-        self._cookie_manager = CookieManager(path=path)
+        self._cookie_manager = CookieManager(path=path, prefix=prefix)
         self._fernet: Optional[Fernet] = None
         self._key_params_cookie = key_params_cookie
         self._password = password
