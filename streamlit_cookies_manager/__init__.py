@@ -11,7 +11,7 @@ _component_func = components.declare_component("CookieManager.sync_cookies", pat
 
 
 class CookieManager(MutableMapping[str, str]):
-    def __init__(self):
+    def __init__(self, *, path: str = None):
         self._queue = st.session_state.setdefault('CookieManager.queue', {})
         raw_cookie = _component_func(queue=self._queue, saveOnly=False, key="CookieManager.sync_cookies")
         if raw_cookie is None:
@@ -20,6 +20,7 @@ class CookieManager(MutableMapping[str, str]):
             self._cookies = parse_cookies(raw_cookie)
             self._clean_queue()
         self._default_expiry = datetime.now() + timedelta(days=365)
+        self._path = path if path is not None else "/"
 
     def ready(self) -> bool:
         return self._cookies is not None
@@ -53,12 +54,12 @@ class CookieManager(MutableMapping[str, str]):
             self._queue[key] = dict(
                 value=value,
                 expires_at=self._default_expiry.isoformat(),
-                path='/',
+                path=self._path,
             )
 
     def __delitem__(self, key: str) -> None:
         if key in self._cookies:
-            self._queue[key] = dict(value=None, path='/')
+            self._queue[key] = dict(value=None, path=self._path)
 
     def _get_cookies(self) -> Mapping[str, str]:
         if self._cookies is None:
