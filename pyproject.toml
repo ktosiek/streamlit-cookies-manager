@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "streamlit-cookies-manager"
-version = "0.1.0"
+version = "0.1.1"
 description = "Access and save cookies from Streamlit"
 authors = ["Tomasz Kontusz <tomasz.kontusz@gmail.com>"]
 license = "Apache-2.0"
