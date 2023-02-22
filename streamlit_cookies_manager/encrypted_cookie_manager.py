@@ -11,7 +11,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from streamlit_cookies_manager import CookieManager
 
 
-@st.cache
+@st.cache_data
 def key_from_parameters(salt: bytes, iterations: int, password: str):
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
