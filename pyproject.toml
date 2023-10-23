@@ -1,6 +1,7 @@
 [tool.poetry]
-name = "streamlit-cookies-manager"
-version = "0.2.0"
+name = "streamlit-cookies-manager-hotpatched"
+packages = [{ include = "streamlit_cookies_manager" }]
+version = "0.2.1"
 description = "Access and save cookies from Streamlit"
 authors = ["Tomasz Kontusz <tomasz.kontusz@gmail.com>"]
 license = "Apache-2.0"
@@ -12,8 +13,8 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-streamlit = ">=0.84"
+python = "^3.10"
+streamlit = ">=1.18.0"
 cryptography = "*"
 
 [tool.poetry.dev-dependencies]
